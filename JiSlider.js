@@ -1,4 +1,5 @@
 /****** JiSlider version 0.5.0 ******/
+// tested on IE9+, Chrome, Safari
 
 (function ($) {
 	$.fn.JiSlider = function (options) {
@@ -24,12 +25,11 @@
 				$.extend(this, options)
 			},
 			roll: function (time) {
-				console.log(this.index)
 				var left = -(this.index * this.width)
 				ul.animate({
 					left: left
 				}, time, this.easing)
-				this.controller.find('.ji-button[data-index=' + this.index + ']').addClass('ji-on').css('background-color', '#000')
+				this.controller.find('.ji-button[data-index=' + this.index + ']').addClass('ji-on').css('background-color', setting.color)
 				this.controller.find('.ji-button[data-index!=' + this.index + ']').removeClass('ji-on').css('background-color', 'transparent')
 
 				this.check()
@@ -59,6 +59,7 @@
 			timeCheck: function () {
 				var now = new Date().getTime()
 				if (now - then > this.time) {
+					then = now
 					return true
 				} else {
 					return false
@@ -82,6 +83,7 @@
 			control: true,
 			easing: 'swing',
 			preview: false,
+			color: '#664422'
 		}, options)
 		var jw = this.width()
 		var jh = this.height()
@@ -95,7 +97,7 @@
 
 		this.css({
 			position: 'relative',
-			overflow: 'hidden',
+			overflow: 'hidden'
 		})
 
 		ul.css({
@@ -104,7 +106,7 @@
 			padding: 0,
 			left: -jw,
 			position: 'relative',
-			listStyleType: 'none',
+			listStyleType: 'none'
 		})
 
 		// reset
@@ -113,38 +115,39 @@
 
 		li.css({
 			width: (100 / (slide + 2)) + '%',
-			float: 'left',
+			float: 'left'
 		})
 
-		img.each(function () {
+		img.each(function () {file:///Users/jiyong/Documents/Plugins/JiSlider/img/1.jpg
 			$(this).css('width', '100%')
 			$(this).css({
-				marginTop: -(($(this).height() - jh) / 2),
+				marginTop: -(($(this).height() - jh) / 2)
 			})
 		})
 
 		// controller
 		if (setting.control) {
-			var controller = $('<div>', {class: 'ji-controller'}).css({
+			var controller = $('<div>', {'class': 'ji-controller'}).css({
 				position: 'absolute',
 				width: 20 * slide,
 				left: 0,
 				right: 0,
 				bottom: 20,
-				margin: 'auto',
+				margin: 'auto'
 			})
 			
 			var buttons = new Array()
 			for (var i = 0; i < slide; i++) {
-				buttons[i] = $('<div>', {class: 'ji-button', 'data-index': (i + 1)}).css({
+				buttons[i] = $('<div>', {'class': 'ji-button', 'data-index': (i + 1)}).css({
 					width: 10,
 					height: 10,
 					margin: 5,
-					border: '1px solid #000',
+					border: '1px solid ' + setting.color,
 					boxSizing: 'border-box',
+					backgroundColor: 'transparent',
 					borderRadius: '50%',
 					float: 'left',
-					cursor: 'pointer',
+					cursor: 'pointer'
 				}).click(function () {
 					var index = $(this).data('index')
 					animate.control(index)
@@ -161,5 +164,4 @@
 
 		return this
 	}
-
 }(jQuery))
