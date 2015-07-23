@@ -1,5 +1,5 @@
 /****** JiSlider version 0.5.1 ******/
-// tested on IE9+, Chrome, Safari
+// tested on Safari 8, Chrome 44, Firefox 44
 
 (function ($) {
 	$.fn.JiSlider = function (options) {
@@ -66,6 +66,7 @@
 				}
 			},
 			control: function (index) {
+				console.log(index);
 				if (this.timeCheck()) {
 					this.index = index;
 					this.reset();
@@ -98,8 +99,8 @@
 		var setting = $.extend({
 			auto: true,
 			start: 1,
-			time: 1000,
-			stay: 2000,
+			time: 600,
+			stay: 3000,
 			control: true,
 			easing: 'ease',
 			// timer: true,
@@ -125,8 +126,6 @@
 			position: 'relative',
 			overflow: 'hidden'
 		});
-
-		console.log(setting.start * jw);
 
 		ul.css({
 			width: (100 * (slides + 2)) + '%',
@@ -156,6 +155,26 @@
 
 		// controller
 		if (setting.control) {
+			var leftArrow = $('<div>', {'class': 'jislider__left-arrow'}).click(function () {
+				animate.control(--animate.index);
+			});
+			var leftArrowTop = $('<div>', {'class': 'jislider__left-arrow__top'}).css({
+				backgroundColor: setting.color,
+			});
+			var leftArrowBottom = $('<div>', {'class': 'jislider__left-arrow__bottom'}).css({
+				backgroundColor: setting.color,
+			});
+
+			var rightArrow = $('<div>', {'class': 'jislider__right-arrow'}).click(function () {
+				animate.control(++animate.index);
+			});
+			var rightArrowTop = $('<div>', {'class': 'jislider__right-arrow__top'}).css({
+				backgroundColor: setting.color,
+			});
+			var rightArrowBottom = $('<div>', {'class': 'jislider__right-arrow__bottom'}).css({
+				backgroundColor: setting.color,
+			});
+
 			var controller = $('<div>', {'class': 'jislider__controller'}).css({
 				width: 20 * slides,
 			});
@@ -169,7 +188,9 @@
 					animate.control(index)
 				});
 			}
-			this.append(controller);
+			this.append(leftArrow, rightArrow, controller);
+			leftArrow.append(leftArrowTop, leftArrowBottom);
+			rightArrow.append(rightArrowTop, rightArrowBottom);
 			controller.append(buttons);
 			animate.init({controller: controller});
 		}
