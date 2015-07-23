@@ -3,22 +3,23 @@
 
 (function ($) {
 	$.fn.JiSlider = function (options) {
-		// stacking prohibit
+		// prohibit stacking
 		var then = new Date().getTime();
-		var UP = 'up', DOWN = 'down';
+		// var UP = 'up', DOWN = 'down';
 
 		// animation
-		var Animate = function (JiSlider, slide, auto, time, stay, easing) {
+		var Animate = function (JiSlider, slides, start, auto, time, stay, easing, reverse) {
 			this.slider = JiSlider;
+			this.slides = slides;
 			this.width = this.slider.width();
 			this.ul = JiSlider.find('ul');
 			this.li = JiSlider.find('ul li');
-			this.index = 1;
+			this.index = start;
 			this.auto = auto;
 			this.time = time;
 			this.stay = stay;
 			this.easing = easing;
-			this.slide = slide;
+			this.reverse = reverse ? -1 : 1;
 			this.play = setInterval(this.autoroll.bind(this), this.stay);
 		}
 
@@ -28,31 +29,40 @@
 			},
 			roll: function (time) {
 				var left = -(this.index * this.width);
-				ul.animate({
-					left: left
-				}, time, this.easing);
+
+				ul.css({
+					'-webkit-transform': 'translateX(' + left + 'px)',
+					'-webkit-transition': '-webkit-transform ' + time / 1000 + 's ' + this.easing,
+					'-ms-transform': 'translateX(' + left + 'px)',
+					'-ms-transition': '-ms-transform ' + time / 1000 + 's ' + this.easing,
+					'transform': 'translateX(' + left + 'px)',
+					'transition': 'transform ' + time / 1000 + 's ' + this.easing,
+				});
+
+				this.check();
 
 				if (this.controller) {
-					this.controller.find('.ji-button[data-index=' + this.index + ']').addClass('ji-on').css('background-color', setting.color);
-					this.controller.find('.ji-button[data-index!=' + this.index + ']').removeClass('ji-on').css('background-color', 'transparent');
+					this.controller.find('.jislider__button[data-index=' + this.index + ']').addClass('jislider__on').css('background-color', setting.color);
+					this.controller.find('.jislider__button[data-index!=' + this.index + ']').removeClass('jislider__on').css('background-color', 'transparent');
 				}
-				
-				this.check();
-			},
-			move: function (index) {
-				this.index = index;
-				this.roll(0);
 			},
 			autoroll: function () {
 				if (this.auto)
-					this.index += 1;
+					this.index += this.reverse;
 				this.roll(this.time);
 			},
 			check: function () {
-				if (this.index > this.slide) {
-					this.move(1);
+				var t = this;
+				if (this.index > this.slides) {
+					this.index = 1;
+					setTimeout(function () {
+						t.roll(0);
+					}, this.time);
 				} else if (this.index < 1) {
-					this.move(slide);
+					this.index = slides;
+					setTimeout(function () {
+						t.roll(0);
+					}, this.time);
 				}
 			},
 			control: function (index) {
@@ -87,18 +97,24 @@
 		// setting
 		var setting = $.extend({
 			auto: true,
-			time: 500,
-			stay: 5000,
+			start: 1,
+			time: 1000,
+			stay: 2000,
 			control: true,
-			easing: 'swing',
+			easing: 'ease',
 			timer: true,
 			timerColor: '#444444',
 			preview: false,
-			color: '#664422'
+			color: '#664422',
+			reverse: false,
 		}, options);
 		var jw = this.width();
 		var jh = this.height();
-		var slide = this.find('ul li').length;
+		var slides = this.find('ul li').length;
+
+		if (setting.start > slides) {
+			throw "Start value is bigger than number of slides";
+		}
 
 		// slider setup
 		var first = li.first().clone();
@@ -111,14 +127,13 @@
 			overflow: 'hidden'
 		});
 
+		console.log(setting.start * jw);
+
 		ul.css({
-			width: (100 * (slide + 2)) + '%',
-			height: '100%',
-			margin: 0,
-			padding: 0,
-			left: -jw,
-			position: 'relative',
-			listStyleType: 'none'
+			width: (100 * (slides + 2)) + '%',
+			'-webkit-transform': 'translateX(' + -(setting.start * jw) + 'px)',
+			'-ms-transform': 'translateX(' + -(setting.start * jw) + 'px)',
+			'transform': 'translateX(' + -(setting.start * jw) + 'px)',
 		});
 
 		// selecting li tags with two clones
@@ -126,53 +141,30 @@
 		var img = this.find('ul li img');
 
 		li.css({
-			position: 'relative',
-			width: (100 / (slide + 2)) + '%',
-			height: '100%',
-			float: 'left',
-			overflow: 'hidden'
+			width: (100 / (slides + 2)) + '%',
 		});
 
 		img.each(function () {
-			var div = $('<div>').css({
+			var div = $('<div>', {'class': 'jislider__img'}).css({
 				backgroundImage: 'url(' + $(this).attr('src') + ')',
-				backgroundSize: 'cover',
-				backgroundPosition: 'center',
-				position: 'absolute',
-				width: '100%',
-				height: '100%',
-				zIndex: 0
 			});
 			$(this).after(div);
 			$(this).remove();
 		});
 
 		// animation
-		var animate = new Animate(this, slide, setting.auto, setting.time, setting.stay, setting.easing);
+		var animate = new Animate(this, slides, setting.start, setting.auto, setting.time, setting.stay, setting.easing, setting.reverse);
 
 		// controller
 		if (setting.control) {
-			var controller = $('<div>', {'class': 'ji-controller'}).css({
-				position: 'absolute',
-				width: 20 * slide,
-				left: 0,
-				right: 0,
-				bottom: 20,
-				margin: 'auto'
+			var controller = $('<div>', {'class': 'jislider__controller'}).css({
+				width: 20 * slides,
 			});
 			
 			var buttons = new Array();
-			for (var i = 0; i < slide; i++) {
-				buttons[i] = $('<div>', {'class': 'ji-button', 'data-index': (i + 1)}).css({
-					width: 10,
-					height: 10,
-					margin: 5,
+			for (var i = 0; i < slides; i++) {
+				buttons[i] = $('<div>', {'class': 'jislider__button', 'data-index': (i + 1)}).css({
 					border: '1px solid ' + setting.color,
-					boxSizing: 'border-box',
-					backgroundColor: 'transparent',
-					borderRadius: '50%',
-					float: 'left',
-					cursor: 'pointer'
 				}).click(function () {
 					var index = $(this).data('index')
 					animate.control(index)
@@ -183,38 +175,34 @@
 			animate.init({controller: controller});
 		}
 
-		if (setting.timer) {
-			var timer = $('<div>', {'class': 'ji-timer'}).css({
-				position: 'absolute',
-				left: 0,
-				bottom: 0,
-				width: 0,
-				height: '10px',
-				backgroundColor: setting.timerColor,
-				opacity: 0.7
-			});
-			this.append(timer);
-			animate.timer(timer);
-		}
+		// timer
+		// if (setting.timer) {
+		// 	var timer = $('<div>', {'class': 'jislider__timer'}).css({
+		// 		backgroundColor: setting.timerColor,
+		// 	});
+		// 	this.append(timer);
+		// 	animate.timer(timer);
+		// }
 
-		if (typeof $.fn.mousewheel !== undefined) {
-			this.on('mousewheel', function (e) {
-				var now = new Date().getTime();
+		// mousewheel move
+		// if (typeof $.fn.mousewheel !== undefined) {
+		// 	this.on('mousewheel', function (e) {
+		// 		var now = new Date().getTime();
 
-				if (now - then > animate.time) {
-					var dir = e.deltaY > 0 ? UP: DOWN;
-					if (dir == UP) {
-						animate.index--;
-						animate.roll(this.time);
-					} else if (dir == DOWN) {
-						animate.index++
-						animate.roll(this.time);
-					}
-				}
+		// 		if (now - then > animate.time) {
+		// 			var dir = e.deltaY > 0 ? UP: DOWN;
+		// 			if (dir == UP) {
+		// 				animate.index--;
+		// 				animate.roll(this.time);
+		// 			} else if (dir == DOWN) {
+		// 				animate.index++
+		// 				animate.roll(this.time);
+		// 			}
+		// 		}
 
-				then = now - animate.time + 100;
-			});
-		}
+		// 		then = now - animate.time + 100;
+		// 	});
+		// }
 
 		animate.roll(0);
 
