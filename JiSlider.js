@@ -1,4 +1,4 @@
-/****** JiSlider version 0.5.1 ******/
+/****** JiSlider version 0.5.2 ******/
 // tested on Safari 8, Chrome 44, Firefox 44
 
 (function ($) {
@@ -101,7 +101,7 @@
 			start: 1,
 			time: 600,
 			stay: 3000,
-			control: true,
+			controller: true,
 			easing: 'ease',
 			// timer: true,
 			// timerColor: '#444444',
@@ -154,7 +154,7 @@
 		var animate = new Animate(this, slides, setting.start, setting.auto, setting.time, setting.stay, setting.easing, setting.reverse);
 
 		// controller
-		if (setting.control) {
+		if (setting.controller) {
 			var leftArrow = $('<div>', {'class': 'jislider__left-arrow'}).click(function () {
 				animate.control(--animate.index);
 			});
