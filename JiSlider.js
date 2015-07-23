@@ -1,14 +1,15 @@
-/****** JiSlider version 0.5.2 ******/
+/****** JiSlider version 0.5.3 ******/
 // tested on Safari 8, Chrome 44, Firefox 44
 
 (function ($) {
 	$.fn.JiSlider = function (options) {
 		// prohibit stacking
+		var JiSlider = this;
 		var then = new Date().getTime();
 		// var UP = 'up', DOWN = 'down';
 
 		// animation
-		var Animate = function (JiSlider, slides, start, auto, time, stay, easing, reverse) {
+		var Animate = function (slides, start, auto, time, stay, easing, reverse) {
 			this.slider = JiSlider;
 			this.slides = slides;
 			this.width = this.slider.width();
@@ -66,7 +67,6 @@
 				}
 			},
 			control: function (index) {
-				console.log(index);
 				if (this.timeCheck()) {
 					this.index = index;
 					this.reset();
@@ -88,6 +88,11 @@
 			},
 			timer: function (bar) {
 				this.bar = bar;
+			},
+			resize: function (width) {
+				this.width = width;
+				this.reset();
+				this.roll(0);
 			}
 		}
 
@@ -109,7 +114,6 @@
 			reverse: false,
 		}, options);
 		var jw = this.width();
-		var jh = this.height();
 		var slides = this.find('ul li').length;
 
 		if (setting.start > slides) {
@@ -151,7 +155,7 @@
 		});
 
 		// animation
-		var animate = new Animate(this, slides, setting.start, setting.auto, setting.time, setting.stay, setting.easing, setting.reverse);
+		var animate = new Animate(slides, setting.start, setting.auto, setting.time, setting.stay, setting.easing, setting.reverse);
 
 		// controller
 		if (setting.controller) {
@@ -195,36 +199,12 @@
 			animate.init({controller: controller});
 		}
 
-		// timer
-		// if (setting.timer) {
-		// 	var timer = $('<div>', {'class': 'jislider__timer'}).css({
-		// 		backgroundColor: setting.timerColor,
-		// 	});
-		// 	this.append(timer);
-		// 	animate.timer(timer);
-		// }
-
-		// mousewheel move
-		// if (typeof $.fn.mousewheel !== undefined) {
-		// 	this.on('mousewheel', function (e) {
-		// 		var now = new Date().getTime();
-
-		// 		if (now - then > animate.time) {
-		// 			var dir = e.deltaY > 0 ? UP: DOWN;
-		// 			if (dir == UP) {
-		// 				animate.index--;
-		// 				animate.roll(this.time);
-		// 			} else if (dir == DOWN) {
-		// 				animate.index++
-		// 				animate.roll(this.time);
-		// 			}
-		// 		}
-
-		// 		then = now - animate.time + 100;
-		// 	});
-		// }
-
 		animate.roll(0);
+
+		$(window).resize(function () {
+			jw = JiSlider.width();
+			animate.resize(jw);
+		});
 
 		return this;
 	}
