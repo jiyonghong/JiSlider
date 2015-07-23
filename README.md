@@ -9,7 +9,19 @@ JiSlider is a simple jQuery Plugin to create a Image Slider. You can modify sett
 Simple Usage
 ------------
 
-$('#JiSlider').JiSlider();
+```html
+<head>
+  <link rel="stylesheet" href="/path/to/JiSlider.css">
+</head>
+...
+<script src="/path/to/jquery.min.js"></script>
+<script src="/path/to/JiSlider.js"></script>
+<script>
+  $(window).load(function () {
+    $('#JiSlider').JiSlider();
+  });
+</script>
+```
 
 Custom Settings
 ---------------
