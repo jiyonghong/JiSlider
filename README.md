@@ -55,11 +55,11 @@ You can modify:
     + Number
   + time
     + This value represents animation time.
-    + Default value: **1000**
+    + Default value: **600**
     + Number in milliseconds
   + stay
     + This value represents stay time in between animations.
-    + Default value: **2000**
+    + Default value: **3000**
     + Number in millisecons
   + controller
     + This value represents where the controller will appear or not
@@ -67,7 +67,7 @@ You can modify:
     + Boolean
   + color
     + This value represents color of controller.
-    + Default value: **#664422**
+    + Default value: **#fff**
     + hexcode value
   + easing
     + This value represents easing of animation.
