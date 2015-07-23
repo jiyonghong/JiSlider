@@ -11,6 +11,7 @@ Simple Usage
 
 ```html
 <!DOCTYPE html>
+<html>
   <head>
     <link rel="stylesheet" href="/path/to/JiSlider.css">
   </head>
