@@ -10,22 +10,39 @@ Simple Usage
 ------------
 
 ```html
-<head>
-  <link rel="stylesheet" href="/path/to/JiSlider.css">
-</head>
-...
-<script src="/path/to/jquery.min.js"></script>
-<script src="/path/to/JiSlider.js"></script>
-<script>
-  $(window).load(function () {
-    $('#JiSlider').JiSlider();
-  });
-</script>
+<!DOCTYPE html>
+  <head>
+    <link rel="stylesheet" href="/path/to/JiSlider.css">
+  </head>
+  <body>
+    <div id="JiSlider" class="JiSlider">
+      <ul>
+        <li>
+          <img src="img1.jpg">
+        </li>
+        <li>
+          <img src="img2.jpg">
+        </li>
+        <li>
+          <img src="img3.jpg">
+        </li>
+      </ul>
+    </div>
+    <script src="/path/to/jquery.min.js"></script>
+    <script src="/path/to/JiSlider.js"></script>
+    <script>
+      $(window).load(function () {
+        $('#JiSlider').JiSlider();
+      });
+    </script>
+  </body>
+</html>
 ```
 
 Custom Settings
 ---------------
 
+Passing a associative array in JiSlider method you can change JiSlider the way you like!  
 You can modify:
   + auto
     + This value represents whether the animation will be automatic or not.
@@ -59,3 +76,14 @@ You can modify:
     + This value represents whether animation direction will be reversed or not
     + Default value: **false**
     + Boolean
+
+Sample Usage
+------------
+
+```javascript
+$('#JiSlider').JiSlider({
+  color: '#fff',
+  start: 3,
+  reverse: true,
+});
+```
