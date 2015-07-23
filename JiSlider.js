@@ -102,9 +102,8 @@
 			stay: 2000,
 			control: true,
 			easing: 'ease',
-			timer: true,
-			timerColor: '#444444',
-			preview: false,
+			// timer: true,
+			// timerColor: '#444444',
 			color: '#664422',
 			reverse: false,
 		}, options);
