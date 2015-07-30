@@ -19,6 +19,7 @@ Simple Usage
   </head>
   <body>
     <div id="JiSlider" class="JiSlider">
+      <!-- ul is required -->
       <ul>
         <li>
           <img src="img1.jpg">
