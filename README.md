@@ -47,38 +47,31 @@ Custom Settings
 
 Passing a associative array in JiSlider method you can change JiSlider the way you like!  
 You can modify:
-  + auto
+  + auto (type: ***Boolean***)
     + This value represents whether the animation will be automatic or not.
     + Default value: **true**
-    + Boolean
-  + start
+  + start (type: ***Number***)
     + This value represents start slide.
     + Default value: **1**
-    + Number
-  + time
-    + This value represents animation time.
+  + time (type: ***Number***)
+    + This value represents animation time in milliseconds.
     + Default value: **600**
-    + Number in milliseconds
-  + stay
-    + This value represents stay time in between animations.
+  + stay (type: ***Number***)
+    + This value represents stay time in between animations in milliseconds.
     + Default value: **3000**
-    + Number in millisecons
-  + controller
+  + controller (type: ***Boolean***)
     + This value represents where the controller will appear or not
     + Default value: **true**
-    + Boolean
-  + color
+  + color (type: ***String***)
     + This value represents color of controller.
     + Default value: **#fff**
-    + hexcode value
-  + easing
+  + easing (type: ***String***)
     + This value represents easing of animation.
     + Default value: **ease**
     + CSS Transition easing property
-  + reverse
+  + reverse (type: ***Boolean***)
     + This value represents whether animation direction will be reversed or not
     + Default value: **false**
-    + Boolean
 
 Sample Usage
 ------------
