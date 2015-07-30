@@ -13,8 +13,7 @@
 			this.slider = JiSlider;
 			this.slides = slides;
 			this.width = this.slider.width();
-			this.ul = JiSlider.find('ul');
-			this.li = JiSlider.find('ul li');
+			this.ul = this.slider.find('ul');
 			this.index = start;
 			this.auto = auto;
 			this.time = time;
@@ -86,9 +85,6 @@
 				clearInterval(this.play);
 				this.play = setInterval(this.autoroll.bind(this), this.stay);
 			},
-			timer: function (bar) {
-				this.bar = bar;
-			},
 			resize: function (width) {
 				this.width = width;
 				this.reset();
@@ -108,9 +104,7 @@
 			stay: 3000,
 			controller: true,
 			easing: 'ease',
-			// timer: true,
-			// timerColor: '#444444',
-			color: '#664422',
+			color: '#fff',
 			reverse: false,
 		}, options);
 		var jw = this.width();
